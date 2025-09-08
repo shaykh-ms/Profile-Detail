@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:padding="12dp">
+
+    <!-- Social icon -->
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/iv_social"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        tools:src="@drawable/ic_setting"
+        tools:tint="@color/black"
+        android:clickable="true"
+        android:focusable="true" />
+
+    <!-- Dot separator -->
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/iv_dot"
+        android:layout_width="8dp"
+        android:layout_height="8dp"
+        android:src="@drawable/ic_dot_seperator"
+        android:layout_marginStart="24dp"
+        />
+</LinearLayout>
