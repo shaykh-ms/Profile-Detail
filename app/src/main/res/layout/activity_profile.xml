@@ -15,38 +15,40 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent=".20" />
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gl_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent=".38" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gl_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent=".62" />
+
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/iv_profile_bg"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:scaleType="fitXY"
-        android:src="@drawable/bg_profile_top"
+        android:src="@drawable/bg_profile"
         app:layout_constraintBottom_toBottomOf="@id/gl_top"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/iv_profile_outline"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:adjustViewBounds="false"
-        android:background="@color/white"
-        app:layout_constraintBottom_toBottomOf="@id/gl_top"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/gl_top"
-        app:shapeAppearanceOverlay="@style/Circular" />
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/iv_profile"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_margin="2dp"
-        app:layout_constraintBottom_toBottomOf="@id/iv_profile_outline"
-        app:layout_constraintEnd_toEndOf="@id/iv_profile_outline"
-        app:layout_constraintStart_toStartOf="@id/iv_profile_outline"
-        app:layout_constraintTop_toTopOf="@id/iv_profile_outline"
-        app:shapeAppearanceOverlay="@style/Circular"
-        tools:background="@color/black" />
+        tools:background="@color/red_test"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintBottom_toBottomOf="@id/gl_top"
+        app:layout_constraintEnd_toEndOf="@id/gl_end"
+        app:layout_constraintStart_toStartOf="@id/gl_start"
+        app:layout_constraintTop_toTopOf="@id/gl_top"
+        app:shapeAppearanceOverlay="@style/Circular" />
 
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -58,7 +60,8 @@
         android:maxLines="1"
         android:paddingHorizontal="10dp"
         android:textColor="@color/white"
-        android:textSize="12sp"
+        android:textSize="14sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/gl_top"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -69,44 +72,46 @@
         android:id="@+id/iv_setting"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
         android:scaleType="centerCrop"
         android:src="@drawable/ic_setting"
-        app:layout_constraintTop_toTopOf="@id/tv_username"
         app:layout_constraintBottom_toBottomOf="@id/tv_username"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginEnd="24dp"/>
+        app:layout_constraintTop_toTopOf="@id/tv_username" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:ellipsize="end"
         android:includeFontPadding="false"
         android:maxLines="1"
         android:paddingHorizontal="10dp"
-        android:textColor="@color/black"
-        android:textSize="12sp"
-        android:layout_marginTop="8dp"
+        android:textColor="@color/black_242424"
+        android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/iv_profile_outline"
+        app:layout_constraintTop_toBottomOf="@id/iv_profile"
         tools:text="John George" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:ellipsize="end"
         android:includeFontPadding="false"
         android:maxLines="1"
         android:paddingHorizontal="10dp"
-        android:textColor="@color/black"
-        android:textSize="12sp"
+        android:textColor="@color/black_purple_8F90A7"
+        android:textSize="16sp"
+        android:textStyle="normal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_name"
-        tools:text="Kochi, Kerala"
-        android:layout_marginTop="8dp"/>
+        tools:text="Kochi, Kerala" />
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -114,10 +119,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="14dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/bg_curved_corners"
         android:clipChildren="true"
-        android:layout_marginTop="20dp"
-        android:paddingVertical="4dp"
+        android:paddingVertical="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_location">
@@ -126,10 +131,11 @@
             android:id="@+id/cl_followers"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/cl_following">
+            app:layout_constraintEnd_toStartOf="@id/cl_following"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tv_follower_count"
                 android:layout_width="wrap_content"
@@ -137,35 +143,39 @@
                 android:ellipsize="end"
                 android:includeFontPadding="false"
                 android:maxLines="1"
-                android:textColor="@color/black"
-                android:textSize="12sp"
+                android:textColor="@color/black_242424"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
                 tools:text="100" />
+
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tv_follower_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:includeFontPadding="false"
-                android:textColor="@color/black"
-                android:textSize="12sp"
                 android:layout_marginStart="8dp"
-                app:layout_constraintStart_toEndOf="@id/tv_follower_count"
-                app:layout_constraintTop_toTopOf="parent"
+                android:includeFontPadding="false"
+                android:text="Followers"
+                android:textColor="@color/black_purple_8F90A7"
+                android:textSize="16sp"
+                android:textStyle="normal"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:text="Followers" />
+                app:layout_constraintStart_toEndOf="@id/tv_follower_count"
+                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_following"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toEndOf="@id/cl_followers"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/cl_followers"
+            app:layout_constraintTop_toTopOf="parent">
+
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tv_following_count"
                 android:layout_width="wrap_content"
@@ -173,25 +183,28 @@
                 android:ellipsize="end"
                 android:includeFontPadding="false"
                 android:maxLines="1"
-                android:textColor="@color/black"
-                android:textSize="12sp"
+                android:textColor="@color/black_242424"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
                 tools:text="100" />
+
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tv_following_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:includeFontPadding="false"
-                android:textColor="@color/black"
-                android:textSize="12sp"
                 android:layout_marginStart="8dp"
-                app:layout_constraintStart_toEndOf="@id/tv_following_count"
-                app:layout_constraintTop_toTopOf="parent"
+                android:includeFontPadding="false"
+                android:text="Following"
+                android:textColor="@color/black_purple_8F90A7"
+                android:textSize="16sp"
+                android:textStyle="normal"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:text="Following" />
+                app:layout_constraintStart_toEndOf="@id/tv_following_count"
+                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -205,21 +218,21 @@
         android:layout_marginTop="20dp"
         android:paddingVertical="4dp"
         android:visibility="gone"
-        tools:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cl_status">
+        app:layout_constraintTop_toBottomOf="@id/cl_status"
+        tools:visibility="visible">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_social"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:clipToPadding="false"
-            app:layout_constraintStart_toStartOf="parent"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -228,24 +241,50 @@
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tl_selector"
         android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:background="@color/white"
+        android:layout_height="40dp"
         android:layout_marginHorizontal="14dp"
-        app:tabSelectedTextColor="@color/purple"
-        app:layout_constraintStart_toStartOf="parent"
+        android:background="@color/white"
+        android:layout_marginTop="20dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cl_social"
+        app:tabBackground="@drawable/tab_background_selector"
         app:tabIndicatorColor="@color/purple_F1F1FE"
         app:tabMode="fixed"
-        app:tabBackground="@drawable/tab_background_selector"
-        />
+        app:tabSelectedTextColor="@color/purple" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewpager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="@color/white"
-        app:layout_constraintTop_toBottomOf="@id/tl_selector"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tl_selector" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_progressbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:elevation="10dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <ProgressBar
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:background="@drawable/bg_curved_corners"
+            android:backgroundTint="@color/white"
+            android:indeterminateTint="@color/purple"
+            android:elevation="2dp"
+            android:padding="15dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

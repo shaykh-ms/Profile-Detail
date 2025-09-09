@@ -8,7 +8,7 @@ import com.shaya.myprofile.domain.Social
 import com.shaya.myprofile.domain.Statistics
 import com.shaya.myprofile.domain.User
 
-
+/**map the remote dto to the domain object.*/
 fun UserDto.toUser(): User {
     return User(
         username = username ?: "",

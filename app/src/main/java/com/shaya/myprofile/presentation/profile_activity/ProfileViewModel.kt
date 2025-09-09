@@ -27,4 +27,18 @@ class ProfileViewModel @Inject constructor(
             }
         }
     }
+
+    private var _shotsCount = 0
+    val shotsCount: Int
+        get() = _shotsCount
+    fun setShotsCount(value: Int) {
+        _shotsCount = value
+    }
+
+    private var _collectionCount = 0
+    val collectionCount: Int
+        get() = _collectionCount
+    fun setCollectionCount(value: Int) {
+        _collectionCount = value
+    }
 }

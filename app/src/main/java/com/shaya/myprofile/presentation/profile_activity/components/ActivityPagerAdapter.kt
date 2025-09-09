@@ -4,11 +4,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.shaya.myprofile.presentation.EmojiFragment
+import com.shaya.myprofile.presentation.UserStatisticFragment
 
-class MediaPagerAdapter(
+class ActivityPagerAdapter(
     fragmentManager: FragmentManager,
-    lifecycle: Lifecycle
+    lifecycle: Lifecycle,
 ) : FragmentStateAdapter(fragmentManager, lifecycle) {
     override fun getItemCount(): Int {
         return 2
@@ -17,15 +17,15 @@ class MediaPagerAdapter(
     override fun createFragment(position: Int): Fragment {
         return when (position) {
             0 -> {
-                EmojiFragment.newInstance(EmojiFragment.PARAM_SHOTS_FRAGMENT)
+                UserStatisticFragment.newInstance(UserStatisticFragment.PARAM_SHOTS_FRAGMENT)
             }
 
             1 -> {
-                EmojiFragment.newInstance(EmojiFragment.PARAM_COLLECTION_FRAGMENT)
+                UserStatisticFragment.newInstance(UserStatisticFragment.PARAM_COLLECTION_FRAGMENT)
             }
 
             else -> {
-                EmojiFragment.newInstance(EmojiFragment.PARAM_SHOTS_FRAGMENT)
+                UserStatisticFragment.newInstance(UserStatisticFragment.PARAM_SHOTS_FRAGMENT)
             }
         }
     }

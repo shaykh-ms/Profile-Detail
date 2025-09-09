@@ -20,8 +20,8 @@ class ProfileRepositoryImpl @Inject constructor(
         emit(Resource.Loading(true))
         try {
             val response = profileApi.getUser()
-            if (response.user!=null) {
-                val userData =response.user.toUser()
+            if (response.user != null) {
+                val userData = response.user.toUser()
                 emit(Resource.Success(userData))
             } else {
                 emit(Resource.Error("Failed to fetch contacts"))

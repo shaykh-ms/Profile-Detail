@@ -5,6 +5,5 @@ import com.shaya.myprofile.util.Resource
 import kotlinx.coroutines.flow.Flow
 
 interface ProfileRepository {
-
     suspend fun getUserDetails(): Flow<Resource<User>>
 }

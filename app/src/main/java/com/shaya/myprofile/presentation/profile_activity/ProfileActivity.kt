@@ -2,6 +2,7 @@ package com.shaya.myprofile.presentation.profile_activity
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Typeface
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -10,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -17,16 +19,18 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
-import com.shaya.myprofile.R
 import com.shaya.myprofile.databinding.ActivityProfileBinding
+import com.shaya.myprofile.domain.Activity
 import com.shaya.myprofile.domain.Social
 import com.shaya.myprofile.domain.Statistics
 import com.shaya.myprofile.domain.User
-import com.shaya.myprofile.presentation.profile_activity.components.MediaPagerAdapter
+import com.shaya.myprofile.presentation.profile_activity.components.ActivityPagerAdapter
 import com.shaya.myprofile.presentation.profile_activity.components.SocialAdapter
 import com.shaya.myprofile.presentation.profile_activity.components.SocialItem
 import com.shaya.myprofile.presentation.profile_activity.components.SocialType
@@ -34,7 +38,6 @@ import com.shaya.myprofile.util.Resource
 import com.shaya.myprofile.util.loadImageByUrl
 import com.shaya.myprofile.util.visible
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -42,56 +45,21 @@ class ProfileActivity : AppCompatActivity() {
 
     private val viewModel: ProfileViewModel by viewModels()
     private lateinit var socialAdapter: SocialAdapter
-    lateinit var binding: ActivityProfileBinding
+    private lateinit var binding: ActivityProfileBinding
     private var socialItems: MutableList<SocialItem> = mutableListOf()
-    private lateinit var adapter: MediaPagerAdapter
-
+    private lateinit var adapter: ActivityPagerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //enableEdgeToEdge()
         binding = ActivityProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
         makeScreenFullView()
-        /* ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-             insets
-         }*/
-
-        // trigger fetch
-        viewModel.fetchUser()
-
-        // collect StateFlow safely with lifecycle
-        lifecycleScope.launchWhenStarted {
-            viewModel.user.collect { state ->
-                when (state) {
-                    is Resource.Loading -> {
-                        // show progress bar
-                    }
-
-                    is Resource.Success -> {
-                        val user = state.data
-                        Log.d("TAG", user.toString())
-                        user?.let {
-                            setUserData(it)
-                        }
-                    }
-
-                    is Resource.Error -> {
-                        Toast.makeText(this@ProfileActivity, state.message, Toast.LENGTH_SHORT)
-                            .show()
-                    }
-                }
-            }
-        }
         initSocialRecyclerView()
-
-
-
+        observeUser()
+        viewModel.fetchUser()
     }
 
-    fun makeScreenFullView(view: View? = null) {
+    private fun makeScreenFullView(view: View? = null) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             val w: Window = window
             w.setFlags(
@@ -114,8 +82,6 @@ class ProfileActivity : AppCompatActivity() {
                     bottomMargin = insets.bottom
                     rightMargin = insets.right
                 }
-                // Return CONSUMED if you don't want want the window insets to keep passing
-                // down to descendant views.
                 WindowInsetsCompat.CONSUMED
             }
 
@@ -126,7 +92,7 @@ class ProfileActivity : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun setUserData(user: User) {
-
+        setActivityCounts(user.statistics.activity)
         setSocialItems(user.social)
         setStatistics(user.statistics)
 
@@ -137,20 +103,15 @@ class ProfileActivity : AppCompatActivity() {
             ivProfile.loadImageByUrl(this@ProfileActivity, user.avatar)
             tvFollowingCount.text = user.statistics.following.toString()
             tvFollowerCount.text = user.statistics.followers.toString()
-
         }
-
-
     }
 
     private fun initSocialRecyclerView() {
-        // Setup adapter
         socialAdapter = SocialAdapter(socialItems) { item ->
             // Handle click events
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(item.url))
             startActivity(intent)
         }
-
         binding.rvSocial.apply {
             adapter = socialAdapter
             layoutManager = LinearLayoutManager(
@@ -159,7 +120,6 @@ class ProfileActivity : AppCompatActivity() {
                 false
             )
         }
-
     }
 
     private fun setSocialItems(social: Social) {
@@ -188,32 +148,43 @@ class ProfileActivity : AppCompatActivity() {
         }
     }
 
-    private fun setStatistics(statics: Statistics){
+    private fun setStatistics(statics: Statistics) {
         lifecycleScope.launch {
 
             binding.apply {
-                adapter = MediaPagerAdapter(
+                adapter = ActivityPagerAdapter(
                     supportFragmentManager,
-                    lifecycle
+                    lifecycle,
                 )
 
                 val shotCount = statics.activity.shots
                 val collectionCount = statics.activity.collections
+
+
                 tlSelector.addTab(tlSelector.newTab().setText("$shotCount shots"))
                 tlSelector.addTab(tlSelector.newTab().setText("$collectionCount Collection"))
+                val firstTab = tlSelector.getTabAt(0)
+                val firstTabTextView = (firstTab?.view?.getChildAt(1) as? TextView)
+                firstTabTextView?.setTypeface(null, Typeface.BOLD)
                 viewpager.adapter = adapter
 
 
                 tlSelector.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                     override fun onTabSelected(tab: TabLayout.Tab?) {
                         tab?.let {
-                            viewpager.currentItem = tab.position
+                            viewpager.currentItem = it.position
+                            val tabTextView = (it.view.getChildAt(1) as? TextView)
+                            tabTextView?.setTypeface(null, Typeface.BOLD)
                         }
                     }
+
                     override fun onTabUnselected(tab: TabLayout.Tab?) {
                         tab?.let {
+                            val tabTextView = (it.view.getChildAt(1) as? TextView)
+                            tabTextView?.setTypeface(null, Typeface.NORMAL)
                         }
                     }
+
                     override fun onTabReselected(tab: TabLayout.Tab?) {
                     }
                 })
@@ -224,6 +195,37 @@ class ProfileActivity : AppCompatActivity() {
                         tlSelector.selectTab(tlSelector.getTabAt(position))
                     }
                 })
+            }
+        }
+    }
+
+    private fun setActivityCounts(activity: Activity) {
+        viewModel.setShotsCount(activity.shots)
+        viewModel.setCollectionCount(activity.collections)
+    }
+
+    private fun observeUser() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.user.collect { state ->
+                    when (state) {
+                        is Resource.Loading -> {
+                            binding.clProgressbar.visible(state.isLoading)
+                        }
+
+                        is Resource.Success -> {
+                            val user = state.data
+                            user?.let { setUserData(it) }
+                            binding.clProgressbar.visible(false)
+                        }
+
+                        is Resource.Error -> {
+                            Toast.makeText(this@ProfileActivity, state.message, Toast.LENGTH_SHORT)
+                                .show()
+                            binding.clProgressbar.visible(false)
+                        }
+                    }
+                }
             }
         }
     }

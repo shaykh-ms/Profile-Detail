@@ -1,8 +1,6 @@
 package com.shaya.myprofile.domain
 
 
-
-
 data class User(
     val username: String,
     val name: String,
